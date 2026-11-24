@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ゼータ・ガムラン合奏団 — Zeta Gamelan Ensemble</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-obsidian: #0e0c0a;
+      --bg-lacquer: #171310;
+      --gold: #d4af37;
+      --gold-bright: #f3d576;
+      --bronze: #b87333;
+      --crimson: #9e2a2b;
+      --emerald-glow: #34d399;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-obsidian);
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(184, 115, 51, 0.16) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 80%, rgba(158, 42, 43, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 85%, rgba(212, 175, 55, 0.09) 0%, transparent 50%);
+      color: #efe7dc;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow-x: hidden;
+    }
+
+    .font-serif-jp {
+      font-family: 'Noto Serif JP', serif;
+    }
+
+    .font-mono-num {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 寺院の漆塗り・金箔パネル */
+    .temple-panel {
+      background: linear-gradient(165deg, rgba(28, 23, 19, 0.92) 0%, rgba(17, 14, 11, 0.96) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.22);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(243, 213, 118, 0.08);
+    }
+
+    /* カスタムゴールド・スライダー */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(58, 46, 36, 0.85);
+      height: 6px;
+      border-radius: 9999px;
+      outline: none;
+      border: 1px solid rgba(212, 175, 55, 0.18);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 35% 35%, #fef0b8, #d4af37 60%, #8f6b18 100%);
+      border: 1px solid rgba(255, 245, 200, 0.7);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.55);
+      transition: transform 0.12s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.16);
+    }
+
+    /* 再生ボタンの光彩アニメーション */
+    @keyframes templePulse {
+      0%, 100% {
+        box-shadow: 0 0 18px rgba(212, 175, 55, 0.4), 0 0 36px rgba(158, 42, 43, 0.35);
+      }
+      50% {
+        box-shadow: 0 0 28px rgba(243, 213, 118, 0.7), 0 0 50px rgba(184, 115, 51, 0.45);
+      }
+    }
+    .btn-playing-glow {
+      animation: templePulse 2.4s infinite ease-in-out;
+    }
+
+    /* 青銅ガンサ鍵盤の質感 */
+    .bronze-key {
+      background: linear-gradient(180deg, #523b24 0%, #362516 45%, #23180f 100%);
+      border: 1px solid rgba(212, 175, 55, 0.38);
+      box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1px rgba(255, 232, 170, 0.25),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+      transition: transform 0.07s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      touch-action: manipulation;
+    }
+    .bronze-key:hover {
+      border-color: rgba(243, 213, 118, 0.75);
+      background: linear-gradient(180deg, #64472a 0%, #412d1a 45%, #291c11 100%);
+    }
+    .bronze-key.struck {
+      transform: translateY(3px) scale(0.97);
+      border-color: #fde68a !important;
+      background: linear-gradient(180deg, #b8862d 0%, #7d531c 50%, #442b0e 100%) !important;
+      box-shadow:
+        0 0 24px rgba(243, 213, 118, 0.65),
+        inset 0 0 14px rgba(255, 245, 200, 0.5) !important;
+    }
+
+    /* 鍵盤の飾り鋲 */
+    .bronze-rivet {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 30% 30%, #fef3c7, #b87333);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    /* 演目カード */
+    .song-card {
+      transition: all 0.18s ease;
+    }
+    .song-card.selected {
+      background: linear-gradient(145deg, rgba(158, 42, 43, 0.28) 0%, rgba(184, 115, 51, 0.22) 100%);
+      border-color: #d4af37;
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.22), inset 0 1px 0 rgba(253, 230, 138, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+
+  <div class="max-w-7xl mx-auto px-3 py-4 sm:px-6 lg:px-8 space-y-5">
+
+    <!-- ヘッダー -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-[11px] font-medium mb-1.5 tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          PRIME NUMBERS × RIEMANN ZETA ZEROS × BALINESE &amp; JAVANESE GAMELAN
+        </div>
+        <h1 class="font-serif-jp text-2xl sm:text-3xl font-bold tracking-wider bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 bg-clip-text text-transparent">
+          ゼータ・ガムラン合奏団
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-400 mt-1">
+          素数音階とゼータ関数の非自明な零点が織りなす青銅の響き・オンバック（うなり）・コテカン合奏
+        </p>
+      </div>
+
+      <!-- 大きな演奏開始 / 停止ボタン ＆ マスター音量 -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2 bg-stone-900/80 border border-amber-500/20 rounded-2xl px-3.5 py-2">
+          <span class="text-[11px] text-stone-400 whitespace-nowrap">全体音量</span>
+          <input id="slider-master" type="range" min="0" max="100" value="80" class="w-20 sm:w-24" />
+          <span id="val-master" class="text-xs font-mono-num text-amber-300 w-8 text-right">80%</span>
+        </div>
+
+        <button id="btn-play-toggle" type="button"
+          class="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-600 via-yellow-600 to-amber-700 hover:from-amber-500 hover:via-yellow-500 hover:to-amber-600 text-stone-950 font-bold text-sm sm:text-base shadow-lg border border-amber-300/60 transition transform active:scale-95 flex items-center gap-2.5 cursor-pointer">
+          <span id="play-icon" class="text-lg leading-none">▶</span>
+          <span id="play-label">合奏を開始</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 舞台ビジュアライザー (HTML5 Canvas) -->
+    <section class="temple-panel rounded-2xl p-3 sm:p-4 relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5 px-1">
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] font-semibold uppercase tracking-widest text-amber-300/90">Temple Stage Visualizer</span>
+          <span id="stage-song-name" class="text-xs font-serif-jp px-2.5 py-0.5 rounded-full bg-red-950/70 border border-amber-500/30 text-amber-200">
+            演目：素数の祭典 (Bali Kebyar)
+          </span>
+        </div>
+        <!-- 数理ステータス表示 -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 font-mono-num text-[11px]">
+          <span id="hud-beat" class="px-2 py-0.5 rounded bg-stone-900/90 border border-stone-700/80 text-amber-300">拍: — / 16</span>
+          <span id="hud-step" class="px-2 py-0.5 rounded bg-stone-900/90 border border-stone-700/80 text-emerald-300">Step: 0</span>
+          <span id="hud-zeta" class="px-2 py-0.5 rounded bg-stone-900/90 border border-stone-700/80 text-amber-200">ζ共鳴: 0.00</span>
+        </div>
+      </div>
+
+      <div class="relative w-full h-64 sm:h-72 md:h-80 rounded-xl overflow-hidden bg-[#0a0806] border border-amber-500/20">
+        <canvas id="stage-canvas" class="w-full h-full block"></canvas>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-2 mt-2 px-1 text-[11px] text-stone-400">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> 中央：ゴング・アグン &amp; オンバック波紋</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> 左右：コテカン (Polos左 / Sangsih右)</span>
+          <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> 下部：バレンガン &amp; クンダン太鼓</span>
+        </div>
+        <span id="hud-tempo-live" class="font-mono-num text-amber-400/85">Live BPM: 144</span>
+      </div>
+    </section>
+
+    <!-- 5つの演目セレクター (Repertoire) -->
+    <section class="temple-panel rounded-2xl p-4 space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="font-serif-jp text-sm sm:text-base font-bold text-amber-200 tracking-wide">
+          演目を選ぶ（5つの自動演奏レパートリー）
+        </h2>
+        <span class="text-[11px] text-stone-400">クリックすると演奏中でも滑らかに曲調が切り替わります</span>
+      </div>
+
+      <div id="song-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+        <!-- JSで5演目を生成 -->
+      </div>
+    </section>
+
+    <!-- コントロールパネル：リアルタイム音響調整 & 音階 & 4パートミキサー -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+      <!-- 左7カラム：リアルタイム音響パラメータ & 音階セレクター -->
+      <div class="lg:col-span-7 temple-panel rounded-2xl p-4 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-500/15 pb-3">
+          <h2 class="font-serif-jp text-sm sm:text-base font-bold text-amber-200">音階と音響チューニング</h2>
+          <!-- 音階セレクター -->
+          <div class="inline-flex rounded-xl bg-stone-950/90 p-1 border border-amber-500/25 gap-1">
+            <button type="button" data-scale="pelog" class="scale-btn px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer bg-amber-600/30 text-amber-200 border border-amber-400/50">
+              ペログ風 (7音)
+            </button>
+            <button type="button" data-scale="slendro" class="scale-btn px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer text-stone-400 hover:text-stone-200">
+              スレンドロ風 (5音)
+            </button>
+            <button type="button" data-scale="zeta" class="scale-btn px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer text-stone-400 hover:text-stone-200">
+              ゼータ零点音階
+            </button>
+          </div>
+        </div>
+
+        <!-- 4つのリアルタイムスライダー -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- テンポ -->
+          <div class="bg-stone-950/55 border border-stone-800/90 rounded-xl p-3 space-y-1.5">
+            <div class="flex justify-between text-xs">
+              <label for="slider-tempo" class="text-stone-200 font-medium">テンポ (Tempo)</label>
+              <span id="val-tempo" class="font-mono-num text-amber-300">144 BPM</span>
+            </div>
+            <input id="slider-tempo" type="range" min="48" max="180" step="1" value="144" class="w-full" />
+            <p class="text-[10px] text-stone-500">ジャワの静謐な歩みからバリの超絶コテカンまで調整。</p>
+          </div>
+
+          <!-- オンバック（うなり） -->
+          <div class="bg-stone-950/55 border border-stone-800/90 rounded-xl p-3 space-y-1.5">
+            <div class="flex justify-between text-xs">
+              <label for="slider-ombak" class="text-stone-200 font-medium">オンバック / うなり (Ombak)</label>
+              <span id="val-ombak" class="font-mono-num text-emerald-300">4.8 Hz</span>
+            </div>
+            <input id="slider-ombak" type="range" min="0" max="80" step="1" value="48" class="w-full" />
+            <p class="text-[10px] text-stone-500">ペア楽器(Pengumbang/Pengisep)の調律差による波のうねり。</p>
+          </div>
+
+          <!-- 金属感 / ゼータ倍音 -->
+          <div class="bg-stone-950/55 border border-stone-800/90 rounded-xl p-3 space-y-1.5">
+            <div class="flex justify-between text-xs">
+              <label for="slider-zeta" class="text-stone-200 font-medium">金属感 / ゼータ倍音</label>
+              <span id="val-zeta" class="font-mono-num text-amber-300">68%</span>
+            </div>
+            <input id="slider-zeta" type="range" min="0" max="100" step="1" value="68" class="w-full" />
+            <p class="text-[10px] text-stone-500">12個のゼータ零点(t₁〜t₁₂)由来の非調和な青銅倍音の強さ。</p>
+          </div>
+
+          <!-- 寺院リバーブ -->
+          <div class="bg-stone-950/55 border border-stone-800/90 rounded-xl p-3 space-y-1.5">
+            <div class="flex justify-between text-xs">
+              <label for="slider-reverb" class="text-stone-200 font-medium">寺院リバーブ (空間残響)</label>
+              <span id="val-reverb" class="font-mono-num text-amber-300">58%</span>
+            </div>
+            <input id="slider-reverb" type="range" min="0" max="100" step="1" value="58" class="w-full" />
+            <p class="text-[10px] text-stone-500">夜の野外寺院パビリオン（バレ）の豊かな空気感と残響。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右5カラム：4パート合奏ミキサー -->
+      <div class="lg:col-span-5 temple-panel rounded-2xl p-4 flex flex-col justify-between">
+        <div class="flex items-center justify-between border-b border-amber-500/15 pb-3 mb-3">
+          <h2 class="font-serif-jp text-sm sm:text-base font-bold text-amber-200">合奏パート・ミキサー</h2>
+          <span class="text-[11px] text-stone-400">ミュート / 音量バランス</span>
+        </div>
+
+        <div class="space-y-2.5" id="mixer-container">
+          <!-- パート1: ゴング・アグン -->
+          <div class="flex items-center gap-3 bg-stone-950/60 border border-stone-800/90 rounded-xl px-3 py-2.5">
+            <button type="button" data-part="gong" class="mute-btn w-14 py-1 rounded-lg text-[11px] font-bold bg-amber-500/20 border border-amber-400/50 text-amber-200 transition cursor-pointer shrink-0">ON</button>
+            <div class="min-w-[105px]">
+              <div class="text-xs font-bold text-amber-100">ゴング・アグン</div>
+              <div class="text-[10px] text-stone-500">周期の要・大青銅鐘</div>
+            </div>
+            <input type="range" data-part-vol="gong" min="0" max="100" value="85" class="flex-1" />
+            <span data-part-val="gong" class="text-[11px] font-mono-num text-stone-400 w-8 text-right">85%</span>
+          </div>
+
+          <!-- パート2: バレンガン -->
+          <div class="flex items-center gap-3 bg-stone-950/60 border border-stone-800/90 rounded-xl px-3 py-2.5">
+            <button type="button" data-part="balungan" class="mute-btn w-14 py-1 rounded-lg text-[11px] font-bold bg-amber-500/20 border border-amber-400/50 text-amber-200 transition cursor-pointer shrink-0">ON</button>
+            <div class="min-w-[105px]">
+              <div class="text-xs font-bold text-amber-100">バレンガン</div>
+              <div class="text-[10px] text-stone-500">中音サロン・核旋律</div>
+            </div>
+            <input type="range" data-part-vol="balungan" min="0" max="100" value="80" class="flex-1" />
+            <span data-part-val="balungan" class="text-[11px] font-mono-num text-stone-400 w-8 text-right">80%</span>
+          </div>
+
+          <!-- パート3: コテカン -->
+          <div class="flex items-center gap-3 bg-stone-950/60 border border-stone-800/90 rounded-xl px-3 py-2.5">
+            <button type="button" data-part="kotekan" class="mute-btn w-14 py-1 rounded-lg text-[11px] font-bold bg-emerald-500/20 border border-emerald-400/50 text-emerald-200 transition cursor-pointer shrink-0">ON</button>
+            <div class="min-w-[105px]">
+              <div class="text-xs font-bold text-emerald-100">コテカン (左右)</div>
+              <div class="text-[10px] text-stone-500">高音ガンサ交互編曲</div>
+            </div>
+            <input type="range" data-part-vol="kotekan" min="0" max="100" value="78" class="flex-1" />
+            <span data-part-val="kotekan" class="text-[11px] font-mono-num text-stone-400 w-8 text-right">78%</span>
+          </div>
+
+          <!-- パート4: クンダン＆クンプル -->
+          <div class="flex items-center gap-3 bg-stone-950/60 border border-stone-800/90 rounded-xl px-3 py-2.5">
+            <button type="button" data-part="kendang" class="mute-btn w-14 py-1 rounded-lg text-[11px] font-bold bg-rose-500/20 border border-rose-400/50 text-rose-200 transition cursor-pointer shrink-0">ON</button>
+            <div class="min-w-[105px]">
+              <div class="text-xs font-bold text-rose-100">クンダン＆クンプル</div>
+              <div class="text-[10px] text-stone-500">両面太鼓・中鐘アクセント</div>
+            </div>
+            <input type="range" data-part-vol="kendang" min="0" max="100" value="75" class="flex-1" />
+            <span data-part-val="kendang" class="text-[11px] font-mono-num text-stone-400 w-8 text-right">75%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 手動演奏用：青銅ガンサ鍵盤 (Interactive Gangsa Keys) -->
+    <section class="temple-panel rounded-2xl p-4 sm:p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div>
+          <h2 class="font-serif-jp text-sm sm:text-base font-bold text-amber-200">
+            青銅ガンサ鍵盤（手動演奏・合奏セッション）
+          </h2>
+          <p class="text-xs text-stone-400 mt-0.5">
+            タップ／クリック、またはPCキーボード（<span class="font-mono-num text-amber-300">A S D F G H J K L ;</span>）で自動演奏に合わせて自由に即興演奏できます。
+          </p>
+        </div>
+        <button id="btn-strike-gong" type="button"
+          class="px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/45 text-amber-200 text-xs font-medium transition cursor-pointer">
+          ✦ ゴング・アグンを一打
+        </button>
+      </div>
+
+      <div id="gangsa-keys" class="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-2.5">
+        <!-- JSで選択音階に応じた10枚の青銅鍵盤を生成 -->
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    /**
+     * =========================================================================
+     * ゼータ・ガムラン合奏団 (Zeta Gamelan Ensemble)
+     * リーマン・ゼータ関数の非自明な零点と素数音階によるジェネレーティブ・ガムラン
+     * =========================================================================
+     */
+
+    // リーマン・ゼータ関数の最初の12個の非自明な零点（虚部 t1 〜 t12）
+    const ZETA_ZEROS = [
+      14.1347, 21.0220, 25.0109, 30.4249, 32.9351, 37.5862,
+      40.9187, 43.3271, 48.0052, 49.7738, 52.9703, 56.4462
+    ];
+
+    // ゼータ零点から生成した青銅倍音比率（高すぎず美しく響く範囲に調整）
+    const ZETA_PARTIAL_RATIOS = ZETA_ZEROS.map((t, idx) => {
+      if (idx === 0) return 1.0;
+      const raw = t / ZETA_ZEROS[0];
+      // 自然な青銅の倍音感（2.1〜5.8倍付近）に緩やかに配置
+      return 1 + (raw - 1) * 1.12;
+    });
+
+    // 基準周波数 (G3 = 196.0 Hz: 温かみのある青銅中音域)
+    const BASE_F0 = 196.0;
+
+    // PCキーボード割り当て（10鍵）
+    const KEY_SHORTCUTS = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';'];
+
+    /**
+     * 素数や数値を1オクターブ [1.0, 2.0) に折りたたむ
+     */
+    function foldOctave(val) {
+      let r = val;
+      while (r >= 2.0) r /= 2.0;
+      while (r < 1.0) r *= 2.0;
+      return r;
+    }
+
+    /**
+     * 3種類の素数・ゼータ音階を構築
+     */
+    function buildScales() {
+      // 1. ペログ風素数音階 (7音: 素数 2, 3, 5, 7, 11, 13, 17 をオクターブ折り返し)
+      const pelogPrimes = [2, 3, 5, 7, 11, 13, 17];
+      const pelog = pelogPrimes
+        .map(p => ({ label: `p=${p}`, prime: p, ratio: foldOctave(p) }))
+        .sort((a, b) => a.ratio - b.ratio);
+
+      // 2. スレンドロ風素数音階 (5音: 素数 2, 3, 5, 11, 13 をオクターブ折り返し)
+      const slendroPrimes = [2, 3, 5, 11, 13];
+      const slendro = slendroPrimes
+        .map(p => ({ label: `p=${p}`, prime: p, ratio: foldOctave(p) }))
+        .sort((a, b) => a.ratio - b.ratio);
+
+      // 3. ゼータ零点音階 (最初の7零点の比率を直接オクターブ折り返し)
+      const zeta = ZETA_ZEROS.slice(0, 7)
+        .map((t, idx) => ({ label: `t${idx + 1}`, prime: idx + 1, ratio: foldOctave(t / ZETA_ZEROS[0]) }))
+        .sort((a, b) => a.ratio - b.ratio);
+
+      return { pelog, slendro, zeta };
+    }
+
+    const SCALES = buildScales();
+
+    /**
+     * 5つの自動演奏レパートリー（演目）定義
+     */
+    const REPERTOIRE = [
+      {
+        id: 'kebyar',
+        title: '素数の祭典',
+        subtitle: 'Bali Kebyar',
+        desc: '素数・合成数の交互コテカンと力強いオンバックが躍動する、華麗なバリ風合奏。',
+        scale: 'pelog',
+        tempo: 144,
+        ombak: 4.8,
+        zeta: 0.68,
+        reverb: 0.56,
+        cycleBeats: 16,
+        subdivisions: 4 // 1拍4分割（16分音符コテカン）
+      },
+      {
+        id: 'karawitan',
+        title: '零点の夜明け',
+        subtitle: 'Jawa Karawitan',
+        desc: 'ゆったりとした大ゴングの周期と静謐なバレンガンが深い残響に溶けるジャワ宮廷風。',
+        scale: 'pelog',
+        tempo: 64,
+        ombak: 2.2,
+        zeta: 0.52,
+        reverb: 0.82,
+        cycleBeats: 32,
+        subdivisions: 2
+      },
+      {
+        id: 'trance',
+        title: '双子素数の舞',
+        subtitle: 'Temple Trance',
+        desc: 'クンダン太鼓と素数拍の推進力、双子素数の瞬間に煌めくトランス・ポリリズム。',
+        scale: 'pelog',
+        tempo: 118,
+        ombak: 4.0,
+        zeta: 0.72,
+        reverb: 0.62,
+        cycleBeats: 16,
+        subdivisions: 4
+      },
+      {
+        id: 'moonlight',
+        title: '月夜のオンバック',
+        subtitle: 'Moonlight Ombak',
+        desc: '5音スレンドロ素数音階と深いオンバックのうねりが夜空に漂う幻想アンビエント。',
+        scale: 'slendro',
+        tempo: 76,
+        ombak: 6.2,
+        zeta: 0.60,
+        reverb: 0.86,
+        cycleBeats: 16,
+        subdivisions: 2
+      },
+      {
+        id: 'finale',
+        title: 'オイラー積の祝宴',
+        subtitle: 'Festival Finale',
+        desc: '自然な緩急（呼吸するテンポ）と全パートの交錯、高音カスケードが彩る祝祭フィナーレ。',
+        scale: 'zeta',
+        tempo: 128,
+        ombak: 5.0,
+        zeta: 0.76,
+        reverb: 0.66,
+        cycleBeats: 32,
+        subdivisions: 4
+      }
+    ];
+
+    // アプリ全体の状態
+    const state = {
+      isPlaying: false,
+      songId: 'kebyar',
+      scaleId: 'pelog',
+      tempo: 144,
+      liveTempo: 144,
+      ombakHz: 4.8,
+      zetaOvertones: 0.68,
+      reverbAmount: 0.56,
+      masterVol: 0.80,
+
+      // パートミキサー状態
+      parts: {
+        gong:     { muted: false, vol: 0.85 },
+        balungan: { muted: false, vol: 0.80 },
+        kotekan:  { muted: false, vol: 0.78 },
+        kendang:  { muted: false, vol: 0.75 }
+      },
+
+      // シーケンサー内部カウンタ
+      tick: 0,
+      beat: 0,
+      stepNumber: 1,
+      zetaValue: 0,
+      schedulerTimer: null,
+      nextNoteTime: 0
+    };
+
+    // Web Audio API ノード
+    let audioCtx = null;
+    let masterGain = null;
+    let compressor = null;
+    let warmthFilter = null;
+    let dryBus = null;
+    let reverbNode = null;
+    let reverbGain = null;
+    let analyser = null;
+    let noiseBuffer = null;
+    const partBuses = {};
+
+    // ビジュアライザー用エフェクト配列
+    const visual = {
+      gongPulse: 0,
+      ripples: [],       // { r, maxR, alpha, color, width }
+      sparks: [],        // { x, y, vx, vy, life, maxLife, color, size }
+      arcs: [],          // コテカン左右飛び交いアーク { fromX, toX, y, progress, color }
+      balunganBars: new Array(7).fill(0),
+      kendangLeft: 0,
+      kendangRight: 0,
+      kempulPulse: 0
+    };
+
+    // 素数・双子素数判定ヘルパー
+    function isPrime(n) {
+      if (n < 2) return false;
+      for (let i = 2; i * i <= n; i++) {
+        if (n % i === 0) return false;
+      }
+      return true;
+    }
+
+    function isTwinPrime(n) {
+      return isPrime(n) && (isPrime(n - 2) || isPrime(n + 2));
+    }
+
+    /**
+     * 野外寺院パビリオン（バレ）の豊かなステレオ残響IRを生成
+     */
+    function createTempleReverbIR(ctx, duration = 3.2, decay = 2.4) {
+      const rate = ctx.sampleRate;
+      const len = Math.floor(rate * duration);
+      const buffer = ctx.createBuffer(2, len, rate);
+
+      for (let ch = 0; ch < 2; ch++) {
+        const data = buffer.getChannelData(ch);
+        let lp = 0;
+        let lp2 = 0;
+        for (let i = 0; i < len; i++) {
+          const t = i / len;
+          // わずかなプリディレイと滑らかな減衰
+          const env = i < rate * 0.018
+            ? (i / (rate * 0.018)) * 0.35
+            : Math.pow(1 - t, decay);
+          const white = Math.random() * 2 - 1;
+          // 2段ローパスで耳に優しい温かな木造・石造の寺院残響に
+          lp = lp * 0.72 + white * 0.28;
+          lp2 = lp2 * 0.60 + lp * 0.40;
+          data[i] = lp2 * env * 0.85;
+        }
+      }
+      return buffer;
+    }
+
+    /**
+     * マレット打撃音＆太鼓スラップ用のノイズバッファ
+     */
+    function createNoiseBuffer(ctx) {
+      const len = ctx.sampleRate * 0.5;
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) {
+        d[i] = Math.random() * 2 - 1;
+      }
+      return buf;
+    }
+
+    /**
+     * Web Audio API 初期化
+     */
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioCtx();
+
+        // 高域の刺々しさを優しく丸めるウォーム・フィルター
+        warmthFilter = audioCtx.createBiquadFilter();
+        warmthFilter.type = 'highshelf';
+        warmthFilter.frequency.setValueAtTime(5200, audioCtx.currentTime);
+        warmthFilter.gain.setValueAtTime(-5.5, audioCtx.currentTime);
+
+        // マスターコンプレッサー（クリッピング完全防止）
+        compressor = audioCtx.createDynamicsCompressor();
+        compressor.threshold.setValueAtTime(-16, audioCtx.currentTime);
+        compressor.knee.setValueAtTime(22, audioCtx.currentTime);
+        compressor.ratio.setValueAtTime(6, audioCtx.currentTime);
+        compressor.attack.setValueAtTime(0.005, audioCtx.currentTime);
+        compressor.release.setValueAtTime(0.22, audioCtx.currentTime);
+
+        // マスターゲイン
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(state.masterVol * 0.85, audioCtx.currentTime);
+
+        // アナライザー
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 1024;
+        analyser.smoothingTimeConstant = 0.82;
+
+        // ドライバス ＆ 寺院リバーブ
+        dryBus = audioCtx.createGain();
+        dryBus.gain.setValueAtTime(0.82, audioCtx.currentTime);
+
+        reverbNode = audioCtx.createConvolver();
+        reverbNode.buffer = createTempleReverbIR(audioCtx, 3.2, 2.3);
+
+        reverbGain = audioCtx.createGain();
+        reverbGain.gain.setValueAtTime(state.reverbAmount * 0.78, audioCtx.currentTime);
+
+        // 各パートのバスを作成
+        ['gong', 'balungan', 'kotekan', 'kendang'].forEach(part => {
+          const g = audioCtx.createGain();
+          const pState = state.parts[part];
+          g.gain.setValueAtTime(pState.muted ? 0 : pState.vol, audioCtx.currentTime);
+          g.connect(dryBus);
+          g.connect(reverbNode);
+          partBuses[part] = g;
+        });
+
+        // 最終段接続
+        dryBus.connect(warmthFilter);
+        reverbNode.connect(reverbGain);
+        reverbGain.connect(warmthFilter);
+
+        warmthFilter.connect(compressor);
+        compressor.connect(masterGain);
+        masterGain.connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        noiseBuffer = createNoiseBuffer(audioCtx);
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    /**
+     * 木製マレットの柔らかな打撃クリック音を追加
+     */
+    function addMalletClick(time, dest, freq = 1800, level = 0.08, duration = 0.016) {
+      const src = audioCtx.createBufferSource();
+      src.buffer = noiseBuffer;
+
+      const bp = audioCtx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(freq, time);
+      bp.Q.setValueAtTime(2.5, time);
+
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.0001, time);
+      g.gain.linearRampToValueAtTime(level, time + 0.002);
+      g.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+      src.connect(bp);
+      bp.connect(g);
+      g.connect(dest);
+
+      src.start(time);
+      src.stop(time + duration + 0.01);
+    }
+
+    /**
+     * =========================================================================
+     * 楽器1: ゴング・アグン (Gong Ageng)
+     * 深い青銅の基音 + ゼータ零点倍音 + ゆったりとしたオンバックのうねり
+     * =========================================================================
+     */
+    function playGongAgeng(time, velocity = 0.85, pitchMult = 1.0) {
+      initAudio();
+      const bus = partBuses.gong;
+      const baseFreq = 58.0 * pitchMult; // 深遠な低音
+      const decay = 6.2;
+
+      const noteGain = audioCtx.createGain();
+      noteGain.gain.setValueAtTime(0.0001, time);
+      // ゴング特有の少し丸い立ち上がり
+      noteGain.gain.linearRampToValueAtTime(velocity * 0.55, time + 0.045);
+      noteGain.gain.exponentialRampToValueAtTime(0.0001, time + decay);
+      noteGain.connect(bus);
+
+      // オンバック（ペア発振器による自然な大波のうねり: ゴングはゆっくり 0.8〜2.5Hz）
+      const gongBeat = Math.max(0.5, state.ombakHz * 0.35);
+      [-gongBeat / 2, gongBeat / 2].forEach(detune => {
+        const osc = audioCtx.createOscillator();
+        const og = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(baseFreq + detune, time);
+        og.gain.setValueAtTime(0.55, time);
+        osc.connect(og);
+        og.connect(noteGain);
+        osc.start(time);
+        osc.stop(time + decay + 0.1);
+      });
+
+      // 2倍付近の温かな胴鳴り
+      const bodyOsc = audioCtx.createOscillator();
+      const bodyGain = audioCtx.createGain();
+      bodyOsc.type = 'triangle';
+      bodyOsc.frequency.setValueAtTime(baseFreq * 2.01, time);
+      bodyGain.gain.setValueAtTime(0.16, time);
+      bodyGain.gain.exponentialRampToValueAtTime(0.0001, time + decay * 0.65);
+      bodyOsc.connect(bodyGain);
+      bodyGain.connect(noteGain);
+      bodyOsc.start(time);
+      bodyOsc.stop(time + decay * 0.7);
+
+      // ゼータ零点による青銅の非調和倍音（少し遅れてふわっと花開くシマー）
+      const overtoneAmt = state.zetaOvertones;
+      if (overtoneAmt > 0.02) {
+        const partialIndices = [1, 2, 3, 5, 7];
+        partialIndices.forEach((zIdx, i) => {
+          const freq = baseFreq * ZETA_PARTIAL_RATIOS[zIdx] * 1.45;
+          if (freq > 4500) return;
+
+          const osc = audioCtx.createOscillator();
+          const pg = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, time);
+
+          const amp = (0.14 * overtoneAmt) / Math.pow(i + 1, 0.85);
+          const pDecay = decay * (0.65 - i * 0.08);
+          pg.gain.setValueAtTime(0.0001, time);
+          pg.gain.linearRampToValueAtTime(amp, time + 0.14 + i * 0.03);
+          pg.gain.exponentialRampToValueAtTime(0.0001, time + pDecay);
+
+          osc.connect(pg);
+          pg.connect(noteGain);
+          osc.start(time);
+          osc.stop(time + pDecay + 0.1);
+        });
+      }
+
+      // 柔らかなバチ（布巻きマレット）の低音インパクト
+      addMalletClick(time, noteGain, 260, 0.14 * velocity, 0.045);
+
+      // ビジュアル同期
+      scheduleVisual(time, () => {
+        visual.gongPulse = 1.0;
+        visual.ripples.push({ r: 38, maxR: 280, alpha: 0.95, color: '#f3d576', width: 3.5 });
+        setTimeout(() => {
+          visual.ripples.push({ r: 32, maxR: 230, alpha: 0.65, color: '#d4af37', width: 2.0 });
+        }, 160);
+      });
+    }
+
+    /**
+     * =========================================================================
+     * 楽器2 & 3: 青銅メタロフォン（バレンガン Saron / コテカン Gangsa）
+     * ペア発振器(Pengumbang & Pengisep)によるオンバック + ゼータ零点倍音
+     * =========================================================================
+     */
+    function playBronzeMetallophone(time, freq, opts = {}) {
+      initAudio();
+      const part = opts.part || 'balungan';
+      const bus = partBuses[part] || partBuses.balungan;
+      const pan = typeof opts.pan === 'number' ? opts.pan : 0;
+      const velocity = typeof opts.velocity === 'number' ? opts.velocity : 0.45;
+      const decay = typeof opts.decay === 'number' ? opts.decay : (part === 'kotekan' ? 1.15 : 2.2);
+      const primeWeightSeed = opts.primeSeed || 3;
+
+      const panner = audioCtx.createStereoPanner();
+      panner.pan.setValueAtTime(Math.max(-1, Math.min(1, pan)), time);
+      panner.connect(bus);
+
+      const envGain = audioCtx.createGain();
+      envGain.gain.setValueAtTime(0.0001, time);
+      envGain.gain.linearRampToValueAtTime(velocity * 0.42, time + 0.006);
+      envGain.gain.exponentialRampToValueAtTime(0.0001, time + decay);
+      envGain.connect(panner);
+
+      // ペア発振器（Pengumbang / Pengisep）による本物のバリ式オンバック（うなり）
+      const halfDetune = state.ombakHz / 2;
+      [-halfDetune, halfDetune].forEach(d => {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(Math.max(40, freq + d), time);
+        g.gain.setValueAtTime(0.48, time);
+        osc.connect(g);
+        g.connect(envGain);
+        osc.start(time);
+        osc.stop(time + decay + 0.05);
+      });
+
+      // ゼータ零点由来の青銅メタリック倍音
+      const overtoneAmt = state.zetaOvertones;
+      if (overtoneAmt > 0.02) {
+        const lnSeed = Math.log(Math.max(2, primeWeightSeed));
+        // 5つのゼータ零点倍音を厳選し、高域が耳障りにならないように制御
+        const indices = [1, 2, 4, 6, 9];
+        indices.forEach((zIdx, i) => {
+          const partialFreq = freq * ZETA_PARTIAL_RATIOS[zIdx];
+          if (partialFreq > 9500) return;
+
+          // 素数干渉の重み (1 - cos(t_k * ln(p))) / 2 を倍音バランスに反映
+          const interference = 0.35 + 0.65 * ((1 - Math.cos(ZETA_ZEROS[zIdx] * lnSeed)) / 2);
+          const amp = (0.24 * overtoneAmt * interference) / Math.pow(i + 1, 1.15);
+          const pDecay = Math.max(0.14, decay / Math.pow(i + 1.4, 0.72));
+
+          const osc = audioCtx.createOscillator();
+          const pg = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(partialFreq, time);
+
+          pg.gain.setValueAtTime(amp, time);
+          pg.gain.exponentialRampToValueAtTime(0.0001, time + pDecay);
+
+          osc.connect(pg);
+          pg.connect(envGain);
+          osc.start(time);
+          osc.stop(time + pDecay + 0.04);
+        });
+      }
+
+      // 木槌（パングル）の繊細なアタック音
+      const clickFreq = Math.min(4800, freq * 3.2);
+      addMalletClick(time, panner, clickFreq, 0.055 * velocity, 0.012);
+    }
+
+    /**
+     * =========================================================================
+     * 楽器4: クンダン太鼓 (Kendang) & クンプル中鐘 (Kempul)
+     * =========================================================================
+     */
+    function playKendang(time, stroke = 'dung', velocity = 0.7) {
+      initAudio();
+      const bus = partBuses.kendang;
+      const panner = audioCtx.createStereoPanner();
+      panner.pan.setValueAtTime(stroke === 'dung' ? -0.18 : 0.22, time);
+      panner.connect(bus);
+
+      if (stroke === 'dung') {
+        // 低い皮面の豊かな胴鳴り（ピッチドロップ）
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(142, time);
+        osc.frequency.exponentialRampToValueAtTime(64, time + 0.16);
+
+        g.gain.setValueAtTime(0.001, time);
+        g.gain.linearRampToValueAtTime(0.46 * velocity, time + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0001, time + 0.28);
+
+        osc.connect(g);
+        g.connect(panner);
+        osc.start(time);
+        osc.stop(time + 0.30);
+
+        scheduleVisual(time, () => { visual.kendangLeft = 1.0; });
+
+      } else if (stroke === 'tak') {
+        // 乾いた木と皮の鋭いスラップ音
+        const src = audioCtx.createBufferSource();
+        src.buffer = noiseBuffer;
+        const bp = audioCtx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.setValueAtTime(1450, time);
+        bp.Q.setValueAtTime(3.2, time);
+
+        const g = audioCtx.createGain();
+        g.gain.setValueAtTime(0.001, time);
+        g.gain.linearRampToValueAtTime(0.32 * velocity, time + 0.003);
+        g.gain.exponentialRampToValueAtTime(0.0001, time + 0.065);
+
+        src.connect(bp);
+        bp.connect(g);
+        g.connect(panner);
+        src.start(time);
+        src.stop(time + 0.08);
+
+        // 木の胴の共鳴
+        const body = audioCtx.createOscillator();
+        const bg = audioCtx.createGain();
+        body.type = 'triangle';
+        body.frequency.setValueAtTime(340, time);
+        body.frequency.exponentialRampToValueAtTime(210, time + 0.045);
+        bg.gain.setValueAtTime(0.18 * velocity, time);
+        bg.gain.exponentialRampToValueAtTime(0.0001, time + 0.055);
+        body.connect(bg);
+        bg.connect(panner);
+        body.start(time);
+        body.stop(time + 0.065);
+
+        scheduleVisual(time, () => { visual.kendangRight = 1.0; });
+      }
+    }
+
+    /**
+     * クンプル（中型の吊りゴング：周期の中間アクセント）
+     */
+    function playKempul(time, scaleIndex = 0, velocity = 0.55) {
+      initAudio();
+      const scale = SCALES[state.scaleId];
+      const item = scale[scaleIndex % scale.length];
+      const freq = (BASE_F0 * 0.55) * item.ratio;
+      playBronzeMetallophone(time, freq, {
+        part: 'kendang',
+        pan: -0.25,
+        velocity: velocity * 0.85,
+        decay: 3.1,
+        primeSeed: item.prime
+      });
+      scheduleVisual(time, () => {
+        visual.kempulPulse = 1.0;
+        visual.ripples.push({ r: 20, maxR: 130, alpha: 0.55, color: '#b87333', width: 2.0 });
+      });
+    }
+
+    /**
+     * AudioContextの時刻に合わせてビジュアルイベントを発火
+     */
+    function scheduleVisual(audioTime, callback) {
+      const delayMs = Math.max(0, (audioTime - audioCtx.currentTime) * 1000);
+      setTimeout(callback, delayMs);
+    }
+
+    /**
+     * 選択音階から周波数を取得（オクターブ指定可）
+     */
+    function getScaleNote(index, octaveMult = 1.0) {
+      const scale = SCALES[state.scaleId];
+      const len = scale.length;
+      const wrapped = ((index % len) + len) % len;
+      const extraOctaves = Math.floor(index / len);
+      const item = scale[wrapped];
+      return {
+        freq: BASE_F0 * item.ratio * octaveMult * Math.pow(2, extraOctaves),
+        prime: item.prime,
+        label: item.label,
+        degree: wrapped
+      };
+    }
+
+    /**
+     * =========================================================================
+     * ジェネレーティブ・ガムラン・シーケンサー（5演目エンジン）
+     * =========================================================================
+     */
+    function getCurrentSong() {
+      return REPERTOIRE.find(s => s.id === state.songId) || REPERTOIRE[0];
+    }
+
+    function scheduleStep(time) {
+      const song = getCurrentSong();
+      const sub = song.subdivisions; // 1拍あたりの分割数 (2 or 4)
+      const totalCycleTicks = song.cycleBeats * sub;
+
+      const tickInCycle = state.tick % totalCycleTicks;
+      const beatInCycle = Math.floor(tickInCycle / sub); // 0 .. cycleBeats-1
+      const subStep = tickInCycle % sub;                 // 0 .. sub-1
+      const stepNum = state.stepNumber;                  // 1, 2, 3, ...
+
+      // ゼータ波の共鳴値 cos(t_1 * ln(n)) を計算
+      const zetaWave = Math.cos(ZETA_ZEROS[0] * Math.log(stepNum + 1));
+      const zetaWave2 = Math.cos(ZETA_ZEROS[1] * Math.log(stepNum + 1));
+      const primeStep = isPrime(stepNum);
+      const twinStep = isTwinPrime(stepNum);
+
+      // 演目5「オイラー積の祝宴」では自然な呼吸（Accelerando/Ritardando）を適用
+      let currentBpm = state.tempo;
+      if (song.id === 'finale') {
+        const phase = (tickInCycle / totalCycleTicks) * Math.PI * 2;
+        currentBpm = state.tempo * (1 + 0.14 * Math.sin(phase));
+      } else if (song.id === 'kebyar') {
+        // バリ・クビャール風のわずかなダイナミックな揺らぎ
+        const phase = (tickInCycle / totalCycleTicks) * Math.PI * 2;
+        currentBpm = state.tempo * (1 + 0.04 * Math.sin(phase * 2));
+      }
+      state.liveTempo = Math.round(currentBpm);
+
+      // HUD更新
+      scheduleVisual(time, () => {
+        document.getElementById('hud-beat').textContent = `拍: ${beatInCycle + 1} / ${song.cycleBeats}`;
+        let tag = twinStep ? ' [双子素数✦]' : (primeStep ? ' [素数]' : '');
+        document.getElementById('hud-step').textContent = `Step: ${stepNum}${tag}`;
+        document.getElementById('hud-zeta').textContent = `ζ共鳴: ${zetaWave >= 0 ? '+' : ''}${zetaWave.toFixed(2)}`;
+        document.getElementById('hud-tempo-live').textContent = `Live BPM: ${state.liveTempo}`;
+      });
+
+      const scaleLen = SCALES[state.scaleId].length;
+      // ゼータ波から自然な旋律インデックスを生成
+      const melodyIdx = Math.floor(((zetaWave + 1) / 2) * scaleLen) % scaleLen;
+      const counterIdx = Math.floor(((zetaWave2 + 1) / 2) * scaleLen) % scaleLen;
+
+      // ============================================================
+      // 1. ゴング・アグン (周期の最初＝拍1で重厚に鳴る)
+      // ============================================================
+      if (tickInCycle === 0) {
+        const gongVel = song.id === 'moonlight' ? 0.72 : 0.92;
+        playGongAgeng(time, gongVel, song.id === 'karawitan' ? 0.92 : 1.0);
+      }
+
+      // クンプル（中鐘）：周期の中間地点をマーク
+      if (subStep === 0 && beatInCycle > 0 && beatInCycle % 4 === 0) {
+        if (song.id !== 'moonlight' || beatInCycle === 8) {
+          playKempul(time, (beatInCycle / 4) % scaleLen, song.id === 'karawitan' ? 0.42 : 0.58);
+        }
+      }
+
+      // ============================================================
+      // 2. バレンガン (核旋律：拍の頭で荘厳に奏でる)
+      // ============================================================
+      let playBalunganNow = false;
+      let balunganVel = 0.58;
+      let balunganDecay = 2.1;
+
+      if (song.id === 'kebyar') {
+        playBalunganNow = (subStep === 0);
+        // クビャールらしい強弱のうねり
+        balunganVel = (beatInCycle % 4 === 0) ? 0.74 : 0.52;
+        balunganDecay = 1.6;
+      } else if (song.id === 'karawitan') {
+        // ジャワ風は2拍に1回のゆったりした核旋律
+        playBalunganNow = (subStep === 0 && beatInCycle % 2 === 0);
+        balunganVel = 0.50;
+        balunganDecay = 3.8;
+      } else if (song.id === 'trance') {
+        playBalunganNow = (subStep === 0 && (beatInCycle % 2 === 0 || primeStep));
+        balunganVel = primeStep ? 0.68 : 0.48;
+        balunganDecay = 1.8;
+      } else if (song.id === 'moonlight') {
+        // 疎らで浮遊感のあるバレンガン
+        playBalunganNow = (subStep === 0 && (beatInCycle % 4 === 0 || (beatInCycle % 3 === 1 && zetaWave > 0.1)));
+        balunganVel = 0.44;
+        balunganDecay = 4.2;
+      } else if (song.id === 'finale') {
+        playBalunganNow = (subStep === 0);
+        balunganVel = 0.55 + 0.22 * ((beatInCycle % 8) / 8);
+        balunganDecay = 1.9;
+      }
+
+      if (playBalunganNow) {
+        const note = getScaleNote(melodyIdx, 1.0);
+        playBronzeMetallophone(time, note.freq, {
+          part: 'balungan',
+          pan: (melodyIdx / Math.max(1, scaleLen - 1) - 0.5) * 0.45,
+          velocity: balunganVel,
+          decay: balunganDecay,
+          primeSeed: note.prime
+        });
+        scheduleVisual(time, () => {
+          visual.balunganBars[note.degree % visual.balunganBars.length] = 1.0;
+        });
+      }
+
+      // ============================================================
+      // 3. コテカン (Polos左 / Sangsih右 の高速インターロッキング)
+      // 素数/合成数 と cos(t * ln(n)) の符号で左右が緻密に編み上がる
+      // ============================================================
+      let doKotekan = false;
+      let kotekanVel = 0.42;
+      let kotekanDecay = 0.95;
+
+      if (song.id === 'kebyar') {
+        // ほぼ全16分音符で駆け抜けるが、拍15で一瞬息を呑む「アンセル風」の休符
+        doKotekan = !(beatInCycle === 14 && subStep >= 2);
+        kotekanVel = subStep === 0 ? 0.52 : 0.38;
+        kotekanDecay = 0.85;
+      } else if (song.id === 'karawitan') {
+        // ジャワ風の繊細な高音装飾（控えめに時折煌めく）
+        doKotekan = (subStep === 1 && zetaWave > -0.25) || (primeStep && subStep === 0);
+        kotekanVel = 0.28;
+        kotekanDecay = 2.0;
+      } else if (song.id === 'trance') {
+        // 双子素数ステップでは左右同時バースト、通常はポリリズム装飾
+        doKotekan = (subStep % 2 === 0) || primeStep || twinStep;
+        kotekanVel = twinStep ? 0.58 : 0.38;
+        kotekanDecay = 1.0;
+      } else if (song.id === 'moonlight') {
+        // 夜空に浮かぶ星のような高音点描
+        doKotekan = (subStep === 1 && Math.abs(zetaWave) > 0.55);
+        kotekanVel = 0.28;
+        kotekanDecay = 2.8;
+      } else if (song.id === 'finale') {
+        // 周期の後半に向けて高音カスケードが盛り上がる
+        doKotekan = true;
+        kotekanVel = 0.34 + 0.24 * (tickInCycle / totalCycleTicks);
+        kotekanDecay = 1.05;
+      }
+
+      if (doKotekan) {
+        // Polos (左) か Sangsih (右) かを素数性＆ゼータ波符号で決定
+        const isPolos = (subStep % 2 === 0) ? (zetaWave >= -0.1) : primeStep;
+        const pan = isPolos ? -0.68 : 0.68;
+
+        // Polosは核旋律寄り、Sangsihは1〜2度上の絡み合い音（高音オクターブ 2.0x）
+        const kIdx = isPolos
+          ? (melodyIdx + (subStep === 0 ? 0 : 1))
+          : (counterIdx + 2);
+        const octMult = (song.id === 'finale' && beatInCycle >= 24) ? 2.0 * (subStep === 3 ? 2.0 : 1.0) : 2.0;
+        const kNote = getScaleNote(kIdx, Math.min(3.0, octMult));
+
+        playBronzeMetallophone(time, kNote.freq, {
+          part: 'kotekan',
+          pan,
+          velocity: kotekanVel,
+          decay: kotekanDecay,
+          primeSeed: kNote.prime
+        });
+
+        // 双子素数バースト（Temple Trance & Finale）
+        if (twinStep && (song.id === 'trance' || song.id === 'finale')) {
+          const twinNote = getScaleNote(kIdx + 1, 2.0);
+          playBronzeMetallophone(time + 0.045, twinNote.freq, {
+            part: 'kotekan',
+            pan: -pan,
+            velocity: kotekanVel * 0.82,
+            decay: kotekanDecay * 1.2,
+            primeSeed: twinNote.prime
+          });
+        }
+
+        // ビジュアル：左右を行き交う黄金・エメラルドの火花とアーク
+        scheduleVisual(time, () => {
+          spawnKotekanSpark(isPolos, twinStep);
+        });
+      }
+
+      // ============================================================
+      // 4. クンダン太鼓 (グルーヴと推進力)
+      // ============================================================
+      if (song.id === 'kebyar') {
+        if (subStep === 0 && (beatInCycle % 2 === 0)) playKendang(time, 'dung', 0.68);
+        if (subStep === 2 || (subStep === 3 && primeStep)) playKendang(time, 'tak', 0.56);
+      } else if (song.id === 'karawitan') {
+        if (subStep === 0 && beatInCycle % 4 === 2) playKendang(time, 'dung', 0.40);
+        if (subStep === 1 && beatInCycle % 8 === 7) playKendang(time, 'tak', 0.30);
+      } else if (song.id === 'trance') {
+        // 素数周期のトランスビート
+        if (subStep === 0 && (beatInCycle % 2 === 0 || beatInCycle % 3 === 0)) {
+          playKendang(time, 'dung', 0.78);
+        }
+        if (subStep === 2 || (subStep === 1 && primeStep) || (subStep === 3 && twinStep)) {
+          playKendang(time, 'tak', twinStep ? 0.72 : 0.52);
+        }
+      } else if (song.id === 'moonlight') {
+        if (subStep === 0 && beatInCycle === 8) playKendang(time, 'dung', 0.32);
+      } else if (song.id === 'finale') {
+        if (subStep === 0 && beatInCycle % 2 === 0) playKendang(time, 'dung', 0.70);
+        if (subStep === 2 || (beatInCycle % 4 === 3 && subStep === 3)) playKendang(time, 'tak', 0.60);
+      }
+
+      // 次ステップへの時間計算
+      const secondsPerBeat = 60.0 / currentBpm;
+      const stepDuration = secondsPerBeat / sub;
+      state.nextNoteTime += stepDuration;
+      state.tick++;
+      state.stepNumber++;
+    }
+
+    /**
+     * Web Audio ルックアヘッド・スケジューラ（正確なリズム維持）
+     */
+    function schedulerLoop() {
+      if (!state.isPlaying || !audioCtx) return;
+      const lookahead = 0.12; // 120ms 先までスケジュール
+      while (state.nextNoteTime < audioCtx.currentTime + lookahead) {
+        scheduleStep(state.nextNoteTime);
+      }
+      state.schedulerTimer = setTimeout(schedulerLoop, 30);
+    }
+
+    /**
+     * 自動演奏の開始 / 停止
+     */
+    function togglePlay() {
+      initAudio();
+      if (state.isPlaying) {
+        state.isPlaying = false;
+        clearTimeout(state.schedulerTimer);
+        state.schedulerTimer = null;
+        updatePlayButtonUI();
+      } else {
+        state.isPlaying = true;
+        state.tick = 0;
+        state.stepNumber = 1;
+        state.nextNoteTime = audioCtx.currentTime + 0.06;
+        updatePlayButtonUI();
+        schedulerLoop();
+      }
+    }
+
+    function updatePlayButtonUI() {
+      const btn = document.getElementById('btn-play-toggle');
+      const icon = document.getElementById('play-icon');
+      const label = document.getElementById('play-label');
+      if (state.isPlaying) {
+        btn.classList.add('btn-playing-glow');
+        btn.classList.remove('from-amber-600', 'via-yellow-600', 'to-amber-700', 'text-stone-950');
+        btn.classList.add('from-red-800', 'via-rose-700', 'to-amber-700', 'text-amber-50');
+        icon.textContent = '■';
+        label.textContent = '合奏を停止';
+      } else {
+        btn.classList.remove('btn-playing-glow');
+        btn.classList.remove('from-red-800', 'via-rose-700', 'to-amber-700', 'text-amber-50');
+        btn.classList.add('from-amber-600', 'via-yellow-600', 'to-amber-700', 'text-stone-950');
+        icon.textContent = '▶';
+        label.textContent = '合奏を開始';
+      }
+    }
+
+    /**
+     * 演目の選択＆パラメータ反映
+     */
+    function selectSong(songId) {
+      const song = REPERTOIRE.find(s => s.id === songId);
+      if (!song) return;
+
+      state.songId = song.id;
+      state.tempo = song.tempo;
+      state.liveTempo = song.tempo;
+      state.ombakHz = song.ombak;
+      state.zetaOvertones = song.zeta;
+      state.reverbAmount = song.reverb;
+      state.scaleId = song.scale;
+
+      // UIスライダーと表示を同期
+      document.getElementById('slider-tempo').value = song.tempo;
+      document.getElementById('val-tempo').textContent = `${song.tempo} BPM`;
+
+      document.getElementById('slider-ombak').value = Math.round(song.ombak * 10);
+      document.getElementById('val-ombak').textContent = `${song.ombak.toFixed(1)} Hz`;
+
+      document.getElementById('slider-zeta').value = Math.round(song.zeta * 100);
+      document.getElementById('val-zeta').textContent = `${Math.round(song.zeta * 100)}%`;
+
+      document.getElementById('slider-reverb').value = Math.round(song.reverb * 100);
+      document.getElementById('val-reverb').textContent = `${Math.round(song.reverb * 100)}%`;
+      if (audioCtx && reverbGain) {
+        reverbGain.gain.setTargetAtTime(state.reverbAmount * 0.78, audioCtx.currentTime, 0.08);
+      }
+
+      document.getElementById('stage-song-name').textContent = `演目：${song.title} (${song.subtitle})`;
+      document.getElementById('hud-tempo-live').textContent = `Live BPM: ${song.tempo}`;
+
+      // カードのハイライト更新
+      document.querySelectorAll('.song-card').forEach(card => {
+        if (card.dataset.songId === song.id) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+
+      updateScaleButtonsUI();
+      buildGangsaKeys();
+    }
+
+    /**
+     * 音階ボタンUI更新
+     */
+    function updateScaleButtonsUI() {
+      document.querySelectorAll('.scale-btn').forEach(btn => {
+        if (btn.dataset.scale === state.scaleId) {
+          btn.className = 'scale-btn px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer bg-amber-600/30 text-amber-200 border border-amber-400/50';
+        } else {
+          btn.className = 'scale-btn px-2.5 py-1.5 rounded-lg text-xs font-medium transition cursor-pointer text-stone-400 hover:text-stone-200 border border-transparent';
+        }
+      });
+    }
+
+    /**
+     * 5つの演目カードDOM生成
+     */
+    function buildSongCards() {
+      const grid = document.getElementById('song-grid');
+      grid.innerHTML = '';
+
+      REPERTOIRE.forEach((song, idx) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.dataset.songId = song.id;
+        card.className =
+          'song-card text-left p-3 rounded-xl border border-stone-700/70 bg-stone-950/60 ' +
+          'hover:border-amber-400/60 cursor-pointer flex flex-col justify-between gap-1.5 ' +
+          (song.id === state.songId ? 'selected' : '');
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-1">
+              <span class="font-serif-jp font-bold text-sm text-amber-100">${idx + 1}. ${song.title}</span>
+            </div>
+            <div class="text-[10px] font-mono-num text-amber-400/80 uppercase tracking-wider mt-0.5">${song.subtitle}</div>
+            <p class="text-[11px] text-stone-400 mt-1.5 leading-relaxed">${song.desc}</p>
+          </div>
+          <div class="flex items-center justify-between text-[10px] font-mono-num text-stone-500 pt-1 border-t border-stone-800/80">
+            <span>BPM ${song.tempo}</span>
+            <span>Ombak ${song.ombak}Hz</span>
+          </div>
+        `;
+
+        card.addEventListener('click', () => selectSong(song.id));
+        grid.appendChild(card);
+      });
+    }
+
+    /**
+     * 手動演奏用の青銅ガンサ鍵盤（10鍵）を生成
+     */
+    function buildGangsaKeys() {
+      const container = document.getElementById('gangsa-keys');
+      container.innerHTML = '';
+
+      for (let i = 0; i < 10; i++) {
+        const note = getScaleNote(i, 1.0);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.gangsaIdx = i;
+        btn.className = 'bronze-key rounded-xl p-2 h-24 sm:h-28 flex flex-col items-center justify-between cursor-pointer';
+
+        btn.innerHTML = `
+          <div class="w-full flex items-center justify-between px-0.5">
+            <span class="bronze-rivet"></span>
+            <span class="text-[10px] font-mono-num text-amber-200/70 uppercase">${KEY_SHORTCUTS[i]}</span>
+            <span class="bronze-rivet"></span>
+          </div>
+          <div class="text-center">
+            <div class="text-base sm:text-lg font-bold font-mono-num text-amber-100 leading-tight">${note.label}</div>
+            <div class="text-[10px] font-mono-num text-amber-400/85 mt-0.5">${Math.round(note.freq)} Hz</div>
+          </div>
+          <div class="w-full flex justify-center">
+            <span class="bronze-rivet"></span>
+          </div>
+        `;
+
+        const triggerKey = (e) => {
+          if (e) e.preventDefault();
+          initAudio();
+          const pan = ((i / 9) * 2 - 1) * 0.65;
+          playBronzeMetallophone(audioCtx.currentTime, note.freq, {
+            part: 'balungan',
+            pan,
+            velocity: 0.68,
+            decay: 2.5,
+            primeSeed: note.prime
+          });
+
+          // 鍵盤＆舞台ビジュアル反応
+          btn.classList.remove('struck');
+          void btn.offsetWidth;
+          btn.classList.add('struck');
+          clearTimeout(btn._t);
+          btn._t = setTimeout(() => btn.classList.remove('struck'), 220);
+
+          visual.balunganBars[note.degree % visual.balunganBars.length] = 1.0;
+          spawnKotekanSpark(i < 5, false);
+        };
+
+        btn.addEventListener('pointerdown', triggerKey);
+        container.appendChild(btn);
+      }
+    }
+
+    /**
+     * =========================================================================
+     * 舞台ビジュアライザー (HTML5 Canvas)
+     * =========================================================================
+     */
+    function spawnKotekanSpark(isLeft, isTwin) {
+      const canvas = document.getElementById('stage-canvas');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+
+      const startX = isLeft ? w * 0.17 : w * 0.83;
+      const targetX = isLeft ? w * 0.83 : w * 0.17;
+      const y = h * (0.28 + Math.random() * 0.32);
+
+      // 左右を飛び交う光の軌跡（アーク）
+      visual.arcs.push({
+        fromX: startX,
+        toX: targetX,
+        y,
+        ctrlY: y - (35 + Math.random() * 45),
+        progress: 0,
+        color: isTwin ? '#fde047' : (isLeft ? '#34d399' : '#f59e0b')
+      });
+
+      // 周囲に散る微細な光の粒子
+      const count = isTwin ? 10 : 5;
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.8 + Math.random() * 2.2;
+        visual.sparks.push({
+          x: startX,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 0.4,
+          life: 1.0,
+          decay: 0.025 + Math.random() * 0.02,
+          color: isTwin ? '#fef08a' : (isLeft ? '#34d399' : '#fbbf24'),
+          size: isTwin ? 3.2 : 2.2
+        });
+      }
+    }
+
+    function resizeStageCanvas(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const tw = Math.floor(rect.width * dpr);
+      const th = Math.floor(rect.height * dpr);
+      if (canvas.width !== tw || canvas.height !== th) {
+        canvas.width = tw;
+        canvas.height = th;
+      }
+    }
+
+    function startStageVisualizer() {
+      const canvas = document.getElementById('stage-canvas');
+      const ctx = canvas.getContext('2d');
+      const freqData = new Uint8Array(512);
+
+      function draw() {
+        requestAnimationFrame(draw);
+        resizeStageCanvas(canvas);
+
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvas.width / dpr;
+        const h = canvas.height / dpr;
+
+        ctx.save();
+        ctx.scale(dpr, dpr);
+
+        // 背景の深い漆黒と寺院の蝋燭のような温かいオーラ
+        ctx.clearRect(0, 0, w, h);
+        const bgGrad = ctx.createRadialGradient(w * 0.5, h * 0.45, 10, w * 0.5, h * 0.5, w * 0.65);
+        bgGrad.addColorStop(0, 'rgba(184, 115, 51, 0.16)');
+        bgGrad.addColorStop(0.55, 'rgba(90, 26, 20, 0.08)');
+        bgGrad.addColorStop(1, 'rgba(10, 8, 6, 0.98)');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        const cx = w * 0.5;
+        const cy = h * 0.43;
+
+        // 1. リアルタイム音声スペクトルの柔らかな後光（ゴングの背後）
+        if (analyser) {
+          analyser.getByteFrequencyData(freqData);
+          ctx.save();
+          ctx.translate(cx, cy);
+          const bars = 48;
+          const baseRadius = Math.min(w, h) * 0.21;
+          for (let i = 0; i < bars; i++) {
+            const val = freqData[i * 3] / 255;
+            const angle = (i / bars) * Math.PI * 2 - Math.PI / 2;
+            const len = val * 42;
+            ctx.strokeStyle = `rgba(212, 175, 55, ${0.12 + val * 0.45})`;
+            ctx.lineWidth = 2.2;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(angle) * baseRadius, Math.sin(angle) * baseRadius);
+            ctx.lineTo(Math.cos(angle) * (baseRadius + len), Math.sin(angle) * (baseRadius + len));
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        // 2. ゴングのオンバック波紋（同心円リップル）
+        for (let i = visual.ripples.length - 1; i >= 0; i--) {
+          const rp = visual.ripples[i];
+          rp.r += 2.2;
+          rp.alpha *= 0.968;
+          if (rp.alpha < 0.02 || rp.r > rp.maxR) {
+            visual.ripples.splice(i, 1);
+            continue;
+          }
+          ctx.strokeStyle = rp.color;
+          ctx.globalAlpha = rp.alpha;
+          ctx.lineWidth = rp.width;
+          ctx.beginPath();
+          ctx.arc(cx, cy, rp.r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1.0;
+
+        // 3. 中央：装飾的な青銅ゴング・アグン
+        visual.gongPulse *= 0.93;
+        const gongR = Math.min(w, h) * 0.195 * (1 + visual.gongPulse * 0.06);
+
+        // ゴング外輪（青銅グラデーション）
+        const gongGrad = ctx.createRadialGradient(cx - gongR * 0.2, cy - gongR * 0.2, gongR * 0.1, cx, cy, gongR);
+        gongGrad.addColorStop(0, '#f3d576');
+        gongGrad.addColorStop(0.32, '#c89232');
+        gongGrad.addColorStop(0.72, '#7d4d1d');
+        gongGrad.addColorStop(1, '#3b220c');
+
+        ctx.save();
+        ctx.shadowColor = `rgba(243, 213, 118, ${0.25 + visual.gongPulse * 0.65})`;
+        ctx.shadowBlur = 18 + visual.gongPulse * 28;
+        ctx.fillStyle = gongGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, gongR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // ゴングの装飾リング
+        ctx.strokeStyle = 'rgba(254, 240, 138, 0.45)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, gongR * 0.78, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 中央の突起（ペンチョン / Boss）
+        const bossR = gongR * 0.30;
+        const bossGrad = ctx.createRadialGradient(cx - bossR * 0.3, cy - bossR * 0.3, 2, cx, cy, bossR);
+        bossGrad.addColorStop(0, '#fff7cc');
+        bossGrad.addColorStop(0.5, '#d4af37');
+        bossGrad.addColorStop(1, '#6e4714');
+        ctx.fillStyle = bossGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, bossR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 4. 左右コテカン (Polos / Sangsih) ステージ指標と飛び交う光の弧
+        const leftX = w * 0.16;
+        const rightX = w * 0.84;
+        const sideY = h * 0.43;
+
+        // Polos (左) / Sangsih (右) の静かな台座ラベル
+        ctx.font = '600 10px "Inter", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(52, 211, 153, 0.75)';
+        ctx.fillText('POLOS (L)', leftX, sideY + 42);
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.75)';
+        ctx.fillText('SANGSIH (R)', rightX, sideY + 42);
+
+        // アーク描画
+        for (let i = visual.arcs.length - 1; i >= 0; i--) {
+          const arc = visual.arcs[i];
+          arc.progress += 0.055;
+          if (arc.progress >= 1.0) {
+            visual.arcs.splice(i, 1);
+            continue;
+          }
+          const t = arc.progress;
+          // 2次ベジェ曲線上の現在位置
+          const px = (1 - t) * (1 - t) * arc.fromX + 2 * (1 - t) * t * cx + t * t * arc.toX;
+          const py = (1 - t) * (1 - t) * arc.y + 2 * (1 - t) * t * arc.ctrlY + t * t * arc.y;
+
+          ctx.strokeStyle = arc.color;
+          ctx.globalAlpha = (1 - t) * 0.55;
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(arc.fromX, arc.y);
+          ctx.quadraticCurveTo(cx, arc.ctrlY, px, py);
+          ctx.stroke();
+
+          ctx.fillStyle = arc.color;
+          ctx.globalAlpha = 1 - t;
+          ctx.beginPath();
+          ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1.0;
+
+        // スパーク粒子描画
+        for (let i = visual.sparks.length - 1; i >= 0; i--) {
+          const sp = visual.sparks[i];
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.life -= sp.decay;
+          if (sp.life <= 0) {
+            visual.sparks.splice(i, 1);
+            continue;
+          }
+          ctx.fillStyle = sp.color;
+          ctx.globalAlpha = sp.life;
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.size * sp.life, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1.0;
+
+        // 5. 下部中央：バレンガン（青銅バー群）
+        const barCount = visual.balunganBars.length;
+        const totalBarW = Math.min(w * 0.44, 280);
+        const barGap = 6;
+        const barW = (totalBarW - barGap * (barCount - 1)) / barCount;
+        const barStartX = cx - totalBarW / 2;
+        const barY = h - 34;
+
+        for (let i = 0; i < barCount; i++) {
+          visual.balunganBars[i] *= 0.90;
+          const glow = visual.balunganBars[i];
+          const bx = barStartX + i * (barW + barGap);
+          const bh = 16 + glow * 8;
+
+          ctx.fillStyle = glow > 0.08
+            ? `rgba(243, 213, 118, ${0.35 + glow * 0.65})`
+            : 'rgba(120, 82, 42, 0.45)';
+          ctx.strokeStyle = `rgba(212, 175, 55, ${0.35 + glow * 0.65})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(bx, barY - (bh - 16) / 2, barW, bh, 4);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        // 6. 下部左右：クンダン太鼓パルス
+        visual.kendangLeft *= 0.88;
+        visual.kendangRight *= 0.88;
+        const drumY = h - 26;
+
+        [
+          { x: leftX, val: visual.kendangLeft, label: 'DUNG' },
+          { x: rightX, val: visual.kendangRight, label: 'TAK' }
+        ].forEach(d => {
+          const r = 11 + d.val * 9;
+          ctx.fillStyle = `rgba(158, 42, 43, ${0.28 + d.val * 0.65})`;
+          ctx.strokeStyle = `rgba(244, 63, 94, ${0.4 + d.val * 0.6})`;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(d.x, drumY, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = 'rgba(255, 228, 230, 0.75)';
+          ctx.font = '600 9px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(d.label, d.x, drumY + 3);
+        });
+
+        ctx.restore();
+      }
+
+      draw();
+    }
+
+    /**
+     * 全イベントリスナーの登録
+     */
+    function initEvents() {
+      // 再生 / 停止
+      document.getElementById('btn-play-toggle').addEventListener('click', togglePlay);
+
+      // ゴング一打ボタン
+      document.getElementById('btn-strike-gong').addEventListener('click', () => {
+        initAudio();
+        playGongAgeng(audioCtx.currentTime, 0.95, 1.0);
+      });
+
+      // マスター音量
+      document.getElementById('slider-master').addEventListener('input', (e) => {
+        state.masterVol = parseInt(e.target.value, 10) / 100;
+        document.getElementById('val-master').textContent = `${e.target.value}%`;
+        if (audioCtx && masterGain) {
+          masterGain.gain.setTargetAtTime(state.masterVol * 0.85, audioCtx.currentTime, 0.04);
+        }
+      });
+
+      // テンポ
+      document.getElementById('slider-tempo').addEventListener('input', (e) => {
+        state.tempo = parseInt(e.target.value, 10);
+        state.liveTempo = state.tempo;
+        document.getElementById('val-tempo').textContent = `${state.tempo} BPM`;
+        document.getElementById('hud-tempo-live').textContent = `Live BPM: ${state.tempo}`;
+      });
+
+      // オンバック（うなり Hz: 0.0 〜 8.0 Hz）
+      document.getElementById('slider-ombak').addEventListener('input', (e) => {
+        state.ombakHz = parseInt(e.target.value, 10) / 10;
+        document.getElementById('val-ombak').textContent = `${state.ombakHz.toFixed(1)} Hz`;
+      });
+
+      // 金属感 / ゼータ倍音
+      document.getElementById('slider-zeta').addEventListener('input', (e) => {
+        state.zetaOvertones = parseInt(e.target.value, 10) / 100;
+        document.getElementById('val-zeta').textContent = `${e.target.value}%`;
+      });
+
+      // 寺院リバーブ
+      document.getElementById('slider-reverb').addEventListener('input', (e) => {
+        state.reverbAmount = parseInt(e.target.value, 10) / 100;
+        document.getElementById('val-reverb').textContent = `${e.target.value}%`;
+        if (audioCtx && reverbGain) {
+          reverbGain.gain.setTargetAtTime(state.reverbAmount * 0.78, audioCtx.currentTime, 0.06);
+        }
+      });
+
+      // 音階セレクター
+      document.querySelectorAll('.scale-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.scaleId = btn.dataset.scale;
+          updateScaleButtonsUI();
+          buildGangsaKeys();
+        });
+      });
+
+      // 4パートミキサー（ミュートボタン）
+      document.querySelectorAll('.mute-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const part = btn.dataset.part;
+          const p = state.parts[part];
+          p.muted = !p.muted;
+
+          if (p.muted) {
+            btn.textContent = 'MUTE';
+            btn.className = 'mute-btn w-14 py-1 rounded-lg text-[11px] font-bold bg-stone-800 border border-stone-700 text-stone-500 transition cursor-pointer shrink-0';
+          } else {
+            btn.textContent = 'ON';
+            const colorMap = {
+              gong: 'bg-amber-500/20 border-amber-400/50 text-amber-200',
+              balungan: 'bg-amber-500/20 border-amber-400/50 text-amber-200',
+              kotekan: 'bg-emerald-500/20 border-emerald-400/50 text-emerald-200',
+              kendang: 'bg-rose-500/20 border-rose-400/50 text-rose-200'
+            };
+            btn.className = `mute-btn w-14 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer shrink-0 ${colorMap[part]}`;
+          }
+
+          if (audioCtx && partBuses[part]) {
+            partBuses[part].gain.setTargetAtTime(p.muted ? 0 : p.vol, audioCtx.currentTime, 0.04);
+          }
+        });
+      });
+
+      // 4パートミキサー（ボリュームスライダー）
+      document.querySelectorAll('[data-part-vol]').forEach(slider => {
+        slider.addEventListener('input', (e) => {
+          const part = slider.dataset.partVol;
+          const val = parseInt(e.target.value, 10);
+          state.parts[part].vol = val / 100;
+          const label = document.querySelector(`[data-part-val="${part}"]`);
+          if (label) label.textContent = `${val}%`;
+          if (audioCtx && partBuses[part] && !state.parts[part].muted) {
+            partBuses[part].gain.setTargetAtTime(state.parts[part].vol, audioCtx.currentTime, 0.04);
+          }
+        });
+      });
+
+      // PCキーボードでのガンサ手動演奏
+      window.addEventListener('keydown', (e) => {
+        if (e.repeat) return;
+        const idx = KEY_SHORTCUTS.indexOf(e.key.toLowerCase());
+        if (idx !== -1) {
+          const btn = document.querySelector(`[data-gangsa-idx="${idx}"]`);
+          if (btn) {
+            btn.dispatchEvent(new Event('pointerdown'));
+          }
+        }
+      });
+    }
+
+    // 起動処理
+    window.onload = function () {
+      buildSongCards();
+      buildGangsaKeys();
+      initEvents();
+      startStageVisualizer();
+    };
+  </script>
+</body>
+</html>
